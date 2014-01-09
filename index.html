@@ -1,0 +1,84 @@
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>KANTOS STYLE</title>
+  
+  <style type='text/css'>
+    #canvas {border:1px solid #000}
+  </style>
+
+  <script type='text/javascript'>
+
+      var urls = [
+          "img/IMG_5998.JPG",
+          "img/IMG_5999.JPG",
+          "img/IMG_6003.JPG",
+          "img/IMG_6007.JPG",
+          "img/IMG_6008.JPG",
+          "img/IMG_6009.JPG",
+          "img/IMG_6010.JPG",
+          "img/IMG_6011.JPG",
+          "img/IMG_6012.JPG",
+          "img/IMG_6013.JPG",
+          "img/IMG_6014.JPG",
+          "img/IMG_6015.JPG",
+          "img/IMG_6016.JPG",
+          "img/IMG_6017.JPG",
+          "img/IMG_6018.JPG",
+          "img/IMG_6019.JPG"
+      ];
+      var images = new Array();
+      var loaded = 0;
+      for(var i = 0; i < urls.length; i++) {
+          var image = document.createElement('img');
+          image.onload = function(e) {
+              loaded++;
+              if (loaded == urls.length)
+                  draw();
+          };
+          image.onerror = function(e) {
+              alert(e.toString());
+          }
+          image.src = urls[i];
+          images.push(image);
+      }
+
+      function draw() {
+
+          var counter = 0,
+              maxNum = images.length - 1,
+              maxHeight = 400,    
+              maxWidth = 600,
+              canvas = document.getElementById('myCanvas'),
+              ctx = canvas.getContext('2d'),
+              canvasCopy = document.createElement("canvas"),
+              copyContext = canvasCopy.getContext("2d"),
+              me = this;
+
+          this._draw = function() {
+              var img = images[counter++];
+              if (counter > maxNum) counter = 0;
+              var ratio = 1;
+
+              if(img.width > maxWidth)
+                  ratio = maxWidth / img.width;
+              else if(img.height > maxHeight)
+                  ratio = maxHeight / img.height;
+
+              canvasCopy.width = img.width;
+              canvasCopy.height = img.height;
+              copyContext.drawImage(img, 0, 0);
+              canvas.width = img.width * ratio;
+              canvas.height = img.height * ratio;
+              ctx.drawImage(canvasCopy, 0, 0, canvasCopy.width, canvasCopy.height, 0, 0, canvas.width, canvas.height);
+              setTimeout(me._draw, 3000);
+          }
+          this._draw();
+      }
+  </script>
+  </head>
+  <body>
+    <canvas id="myCanvas"></canvas>
+  </body>
+
+</html>
